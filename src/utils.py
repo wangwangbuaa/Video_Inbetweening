@@ -91,17 +91,79 @@ def load_kth_data(f_name, data_path, image_size, K, T):
     flip = np.random.binomial(1, .5, 1)[0]
     tokens = f_name.split()
     vid_path = data_path + tokens[0] + "_uncomp.avi"
-    print("vid_path", vid_path)
-    raise ValueError()
-    vid = imageio.get_reader(vid_path, "ffmpeg")
+    print(">>>vid_path", vid_path)
+
+    # raise ValueError()
+
+    while True:
+        try:
+            vid = imageio.get_reader(vid_path, "ffmpeg")
+            break
+        except Exception:
+            print("imageio failed loading frames, retrying")
+
+    # vid = imageio.get_reader(vid_path, "ffmpeg")
     low = int(tokens[1])
-    high = np.min([int(tokens[2]), vid.get_length()]) - K - T + 1
+    high = int(np.min([int(tokens[2]), vid.get_length()]) - K - T + 1)
     if low == high:
         stidx = 0
     else:
         if low >= high: print(vid_path)
         stidx = np.random.randint(low=low, high=high)
     seq = np.zeros((image_size, image_size, K + T, 1), dtype="float32")
+
+    
+    print("-------print vid_path------") ##adl
+    import alog ##adl
+    from pprint import pprint ##adl
+    alog.info("vid_path") ##adl
+    print(">>> type(vid_path) = ", type(vid_path)) ##adl
+    if hasattr(vid_path, "shape"): ##adl
+        print(">>> vid_path.shape", vid_path.shape) ##adl
+    if type(vid_path) is list: ##adl
+        print(">>> len(vid_path) = ", len(vid_path)) ##adl
+        pprint(vid_path) ##adl
+    else: ##adl
+        pprint(vid_path) ##adl
+    print("------------------------\n") ##adl
+    
+    
+    print("-------print vid.get_length()------") ##adl
+    import alog ##adl
+    from pprint import pprint ##adl
+    alog.info("vid.get_length()") ##adl
+    print(">>> type(vid.get_length()) = ", type(vid.get_length())) ##adl
+    if hasattr(vid.get_length(), "shape"): ##adl
+        print(">>> vid.get_length().shape", vid.get_length().shape) ##adl
+    if type(vid.get_length()) is list: ##adl
+        print(">>> len(vid.get_length()) = ", len(vid.get_length())) ##adl
+        pprint(vid.get_length()) ##adl
+    else: ##adl
+        pprint(vid.get_length()) ##adl
+    print("------------------------\n") ##adl
+    
+    
+    var_list = [low, high, stidx] ##adl
+    for idx,x in enumerate(var_list): ##adl
+        var_names = "low, high, stidx".split(",") ##adl
+        cur_name = var_names[idx] ##adl
+        print("-------print "+ cur_name + "------") ##adl
+        import alog ##adl
+        from pprint import pprint ##adl
+        alog.info(cur_name) ##adl
+        print(">>> type(x) = ", type(x)) ##adl
+        if hasattr(x, "shape"): ##adl
+            print(">>> " + cur_name + ".shape", x.shape) ##adl
+        if type(x) is list: ##adl
+            print(">>> len(" + cur_name + ") = ", len(x)) ##adl
+            pprint(x) ##adl
+        else: ##adl
+            pprint(x) ##adl
+            pass ##adl
+        print("------------------------\n") ##adl
+        
+    
+    
     for t in range(K + T):
         img = cv2.cvtColor(cv2.resize(vid.get_data(stidx + t),
                                       (image_size, image_size)),

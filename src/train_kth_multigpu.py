@@ -1,13 +1,17 @@
 # import pudb; pu.db
+import tensorflow as tf
+# tf.enable_eager_execution()
+
 import time
 from argparse import ArgumentParser
 from os import makedirs
 from os.path import exists
 
-import tensorflow as tf
+# import tensorflow as tf
 from joblib import Parallel, delayed
 
-from mcnet import MCNET
+# from mcnet import MCNET
+from midnet import MCNET
 from utils import *
 
 
@@ -20,6 +24,25 @@ def average_gradients(tower_grads):
         grads = []
         for g, _ in grad_and_vars:
             # Add 0 dimension to the gradients to represent the tower.
+            var_list = [g, _] ##adl
+            for idx,x in enumerate(var_list): ##adl
+                var_names = "g, _".split(",") ##adl
+                cur_name = var_names[idx] ##adl
+                print("-------print "+ cur_name + "------") ##adl
+                import alog ##adl
+                from pprint import pprint ##adl
+                alog.info(cur_name) ##adl
+                print(">>> type(x) = ", type(x)) ##adl
+                if hasattr(x, "shape"): ##adl
+                    print(">>> " + cur_name + ".shape", x.shape) ##adl
+                if type(x) is list: ##adl
+                    print(">>> len(" + cur_name + ") = ", len(x)) ##adl
+                    pprint(x) ##adl
+                else: ##adl
+                    pprint(x) ##adl
+                    pass ##adl
+                print("------------------------\n") ##adl
+            
             expanded_g = tf.expand_dims(g, 0)
 
             # Append on a 'tower' dimension which we will average over below.
@@ -264,6 +287,55 @@ def train(lr, batch_size, alpha, beta, image_size, K, T, num_iter, gpu):
                                    errD_fake + errD_real, errG)
                             )
 
+
+                            if np.mod(counter, 250) == 0:
+                                out = sess.run(model.E_pred,
+                                                        feed_dict={
+                                                            _diff_in: diff_batch,
+                                                            _xt: seq_batch[:, :,
+                                                                 :, K - 1],
+                                                            _target: seq_batch
+                                                        })
+                                
+                                print("-------print out.shape------") ##adl
+                                import alog ##adl
+                                from pprint import pprint ##adl
+                                alog.info("out.shape") ##adl
+                                print(">>> type(out.shape) = ", type(out.shape)) ##adl
+                                if hasattr(out.shape, "shape"): ##adl
+                                    print(">>> out.shape.shape", out.shape.shape) ##adl
+                                if type(out.shape) is list: ##adl
+                                    print(">>> len(out.shape) = ", len(out.shape)) ##adl
+                                    pprint(out.shape) ##adl
+                                else: ##adl
+                                    pprint(out.shape) ##adl
+                                print("------------------------\n") ##adl
+                                # raise ValueError
+
+                                savedir = "../results/images/KTH/" + prefix + "/" + str(counter)
+                                import os
+                                if not os.path.exists(savedir):
+                                    os.makedirs(savedir)
+                                
+                                
+
+                                # print(out[0, 0, :, :, 0])
+                                for idx in range(0, 16):
+                                    show_pred = out[0, idx, :, :, 0]
+                                    show_target = seq_batch[0, :, :, idx, 0]
+                                    show_pred = (inverse_transform(
+                                        show_pred) * 255).astype(
+                                        "uint8")
+                                    show_target = (inverse_transform(
+                                        show_target) * 255).astype(
+                                        "uint8")
+                                    cv2.imwrite(
+                                        savedir + "/pred_" + "{0:04d}".format(
+                                            idx) + ".png", show_pred)
+                                    cv2.imwrite(
+                                        savedir + "/gt_" + "{0:04d}".format(idx) + ".png",
+                                        show_target)
+                                
                             if np.mod(counter, 250) == 2:
                                 model.save(sess, checkpoint_dir, counter)
 
@@ -281,12 +353,12 @@ if __name__ == "__main__":
     parser.add_argument("--beta", type=float, dest="beta",
                         default=0.02, help="GAN loss weight")
     parser.add_argument("--image_size", type=int, dest="image_size",
-                        default=128, help="Mini-batch size")
+                        default=64, help="Mini-batch size")
     parser.add_argument("--K", type=int, dest="K",
-                        default=10,
+                        default=2,
                         help="Number of steps to observe from the past")
     parser.add_argument("--T", type=int, dest="T",
-                        default=10, help="Number of steps into the future")
+                        default=14, help="Number of steps into the future")
     parser.add_argument("--num_iter", type=int, dest="num_iter",
                         default=30000, help="Number of iterations")
     parser.add_argument("--gpu", type=int, nargs="+", dest="gpu", required=True,

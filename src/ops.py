@@ -7,6 +7,9 @@ def batch_norm(inputs, name, train=True, reuse=False):
     return tf.contrib.layers.batch_norm(inputs=inputs, is_training=train,
                                         reuse=reuse, scope=name, scale=True)
 
+def layer_norm(inputs, name, train=True, reuse=False):
+    return tf.contrib.layers.layer_norm(inputs=inputs, trainable=train,
+                                        reuse=reuse, scope=name, scale=True)
 
 def conv2d(input_, output_dim,
            k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
@@ -24,28 +27,37 @@ def conv2d(input_, output_dim,
         return conv
 
 
+def conv1d(input_, output_dim,
+           k=5, d=1, stddev=0.02,
+           name="conv1d", reuse=False, padding='SAME'):
+    with tf.variable_scope(name, reuse=reuse):
+        conv = tf.layers.conv1d(input_, output_dim, k, d, padding=padding)
+        return conv
+
+
+
 def transConv3d(input_, output_dim,
-           k_h=5, k_w=5, k_dep=5, d_h=2, d_w=2, d_dep=2, stddev=0.02,
+           k_h=5, k_w=5, k_dep=5, d_h=1, d_w=1, d_dep=1, stddev=0.02,
            name="transConv3d", reuse=False, padding='SAME'):
     with tf.variable_scope(name, reuse=reuse):
-        conv = tf.layers.conv3d_transpose(input_, output_dim, (k_h, k_w, k_dep),
-                                   (d_h, d_w, d_dep), padding=padding)
+        conv = tf.layers.conv3d_transpose(input_, output_dim, (k_dep, k_h, k_w),
+                                   (d_dep, d_h, d_w), padding=padding)
 
         return conv
 
 def conv3d(input_, output_dim,
-           k_h=5, k_w=5, k_dep=5, d_h=2, d_w=2, d_dep=2, stddev=0.02,
+           k_h=5, k_w=5, k_dep=5, d_h=1, d_w=1, d_dep=1, stddev=0.02,
            name="conv3d", reuse=False, padding='SAME'):
     with tf.variable_scope(name, reuse=reuse):
-        conv = tf.layers.conv3d(input_, output_dim, (k_h, k_w, k_dep),
-                                   (d_h, d_w, d_dep), padding=padding)
+        conv = tf.layers.conv3d(input_, output_dim, (k_dep, k_h, k_w),
+                                   (d_dep, d_h, d_w), padding=padding)
 
         return conv
 
 
 
 def deconv2d(input_, output_shape,
-             k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
+             k_h=5, k_w=5, d_h=1, d_w=1, stddev=0.02,
              name="deconv2d", reuse=False, with_w=False, padding='SAME'):
     with tf.variable_scope(name, reuse=reuse):
         # filter : [height, width, output_channels, in_channels]
