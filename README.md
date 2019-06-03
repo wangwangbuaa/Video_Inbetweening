@@ -3,7 +3,7 @@ Reproduce Paper "From Here to There: Video Inbetweening Using Direct 3D Convolut
 
 New model file will uploaded soon.
 
-## 
+## Model description 
 T = 16 and D = 128 
 
 input: (x_s, x_e), Gaussian noise vector u ∈ R^D
