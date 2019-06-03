@@ -15,7 +15,7 @@ output:(x_s, xˆ1, . . . , xˆT −2, x_e)
 ./data/KTH/download.sh
 ```
 
-## 1. Run
+## 1. Train
 ```
 python3 train_kth_multigpu.py --gpu 0 --batch_size 32 --lr 0.0001
 ```
