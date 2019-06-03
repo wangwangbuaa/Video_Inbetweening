@@ -1,6 +1,7 @@
 # Video_Inbetweening
 Reproduce Paper "From Here to There: Video Inbetweening Using Direct 3D Convolutions From Here to There: Video Inbetweening Using Direct 3D Convolutions" https://arxiv.org/pdf/1905.10240.pdf
 
+New model file will uploaded soon.
 
 ## 
 T = 16 and D = 128 
