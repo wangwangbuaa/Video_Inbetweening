@@ -1,7 +1,6 @@
 # Video_Inbetweening
-Reproduce Paper "From Here to There: Video Inbetweening Using Direct 3D Convolutions From Here to There: Video Inbetweening Using Direct 3D Convolutions" https://arxiv.org/pdf/1905.10240.pdf
+Unofficially Tensorflow implementation of [**From Here to There: Video Inbetweening Using Direct 3D Convolutions From Here to There: Video Inbetweening Using Direct 3D Convolutions**](<https://arxiv.org/pdf/1905.10240.pdf>)
 
-New model file will uploaded soon.
 
 ## update
 Still training...
