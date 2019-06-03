@@ -10,6 +10,13 @@ input: (x_s, x_e), Gaussian noise vector u ∈ R^D
 
 output:(x_s, xˆ1, . . . , xˆT −2, x_e)
 
+## Dataset
+```
+mkdir -p data/KTH
+./data/KTH/download.sh
+download data into data/KTH
+```
+
 ## Run
 ```
 python3 train_kth_multigpu.py --gpu 0 --batch_size 32 --lr 0.0001
