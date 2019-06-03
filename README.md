@@ -24,3 +24,6 @@ output:(x_s, xˆ1, . . . , xˆT −2, x_e)
 ```
 python3 train_kth_multigpu.py --gpu 0 --batch_size 32 --lr 0.0001
 ```
+
+## Thanks
+Some codes are from [here](https://github.com/BoPang1996/Deep-RNN-Framework).
