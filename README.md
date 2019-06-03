@@ -3,6 +3,11 @@ Reproduce Paper "From Here to There: Video Inbetweening Using Direct 3D Convolut
 
 New model file will uploaded soon.
 
+## update
+
+## Requirement
+Tensorflow
+
 ## Model description 
 T = 16 and D = 128 
 
