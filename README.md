@@ -1,6 +1,7 @@
 # Video_Inbetweening
 Reproduce Paper "From Here to There: Video Inbetweening Using Direct 3D Convolutions From Here to There: Video Inbetweening Using Direct 3D Convolutions" https://arxiv.org/pdf/1905.10240.pdf
 
+New model file will uploaded soon.
 
 ## 
 T = 16 and D = 128 
@@ -8,3 +9,8 @@ T = 16 and D = 128
 input: (x_s, x_e), Gaussian noise vector u ∈ R^D
 
 output:(x_s, xˆ1, . . . , xˆT −2, x_e)
+
+## Run
+```
+python3 train_kth_multigpu.py --gpu 0 --batch_size 32 --lr 0.0001
+```
